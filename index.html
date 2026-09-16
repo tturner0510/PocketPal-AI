@@ -74,9 +74,14 @@
           <p class="text-xs text-gray-400 font-medium">Cyberpunk Budget Coach</p>
         </div>
       </div>
-      <span id="budgetStatusBadge" class="badge-normal text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
-        Balanced
-      </span>
+      <div class="flex items-center gap-2">
+        <button onclick="promptApiKey()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 border border-gray-700 px-2.5 py-1.5 rounded-full font-semibold transition-all">
+          ⚙️ Key
+        </button>
+        <span id="budgetStatusBadge" class="badge-normal text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider">
+          Balanced
+        </span>
+      </div>
     </header>
 
     <!-- 4 Main Balance Cards -->
@@ -222,8 +227,8 @@
   </div>
 
   <script>
-    // State management backed by localStorage
     let currentType = 'expense';
+    let apiKey = localStorage.getItem('pocketpal_api_key') || '';
     
     let appData = {
       income: 0,
@@ -233,7 +238,6 @@
       wishlist: []
     };
 
-    // Load from localStorage on initialization
     function initData() {
       const savedStore = localStorage.getItem('pocketpal_data');
       if (savedStore) {
@@ -248,6 +252,19 @@
 
     function saveData() {
       localStorage.setItem('pocketpal_data', JSON.stringify(appData));
+    }
+
+    function promptApiKey() {
+      const userKey = prompt("Enter your Gemini API Key:", apiKey);
+      if (userKey !== null) {
+        apiKey = userKey.trim();
+        localStorage.setItem('pocketpal_api_key', apiKey);
+        if (apiKey) {
+          alert("API Key saved successfully!");
+        } else {
+          alert("API Key cleared.");
+        }
+      }
     }
 
     function setEntryType(type) {
@@ -356,7 +373,6 @@
       alert("Month rolled over! Leftover monthly funds transferred to Savings.");
     }
 
-    // RESET EVERYTHING TO ZERO
     function resetAppToZero() {
       const confirmReset = confirm("🚨 ARE YOU SURE?\n\nThis will permanently wipe all your income, expenses, transactions, savings, and wishlist items back to $0.00.");
       if (confirmReset) {
@@ -377,7 +393,6 @@
       let netRemaining = appData.income - appData.spent;
       let effectiveSavings = appData.saved;
 
-      // Handle deficit coverage from savings automatically
       if (netRemaining < 0 && effectiveSavings > 0) {
         const deficit = Math.abs(netRemaining);
         if (effectiveSavings >= deficit) {
@@ -394,7 +409,6 @@
       document.getElementById('remainingText').innerText = `$${netRemaining.toFixed(2)}`;
       document.getElementById('savedText').innerText = `$${effectiveSavings.toFixed(2)}`;
 
-      // Update Budget Badge Status
       const badge = document.getElementById('budgetStatusBadge');
       if (netRemaining <= 20 && appData.income > 0) {
         badge.innerText = "TIGHT BUDGET";
@@ -404,7 +418,6 @@
         badge.className = "badge-normal text-xs px-3 py-1.5 rounded-full font-bold uppercase tracking-wider";
       }
 
-      // Render Ledger Items
       const ledgerList = document.getElementById('ledgerList');
       if (appData.transactions.length === 0) {
         ledgerList.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">No transactions recorded yet.</p>`;
@@ -430,7 +443,6 @@
         `).join('');
       }
 
-      // Render Wishlist Items
       const wishlistDisplay = document.getElementById('wishlistDisplay');
       if (appData.wishlist.length === 0) {
         wishlistDisplay.innerHTML = `<p class="text-xs text-gray-500 text-center py-4">Your wishlist is currently empty.</p>`;
@@ -474,6 +486,14 @@
       const aiBox = document.getElementById('aiResponseBox');
       const aiBtn = document.getElementById('aiBtn');
 
+      if (!apiKey) {
+        promptApiKey();
+        if (!apiKey) {
+          aiBox.innerHTML = `<p class="text-red-400 text-xs">Please set an API Key using the ⚙️ Key button at the top to use AI features.</p>`;
+          return;
+        }
+      }
+
       aiBtn.disabled = true;
       aiBtn.innerText = "Analyzing Finances...";
       aiBox.innerHTML = `<div class="animate-pulse text-purple-400 text-xs">🤖 PocketPal AI is analyzing your ledger & wishlist...</div>`;
@@ -495,7 +515,7 @@
       `;
 
       try {
-        const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent", {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -504,18 +524,17 @@
         });
 
         const data = await response.json();
-        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Couldn't retrieve AI analysis right now. Check your internet connection!";
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text || "Couldn't retrieve AI analysis right now. Please check your API key.";
 
         aiBox.innerHTML = `<div class="prose prose-invert text-xs leading-relaxed space-y-2">${text.replace(/\n/g, '<br>')}</div>`;
       } catch (err) {
-        aiBox.innerHTML = `<p class="text-red-400 text-xs">Error connecting to AI Coach. Please try again later.</p>`;
+        aiBox.innerHTML = `<p class="text-red-400 text-xs">Error connecting to AI Coach. Check your API Key and network.</p>`;
       } finally {
         aiBtn.disabled = false;
         aiBtn.innerHTML = `<span>✨</span> Refresh AI Advice`;
       }
     }
 
-    // Run initialization
     initData();
   </script>
 </body>
