@@ -7,7 +7,6 @@
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* Custom Cyberpunk / Dark Neon Aesthetics */
     body {
       font-family: 'Plus Jakarta Sans', sans-serif;
       background-color: #0b0c10;
@@ -23,7 +22,6 @@
       font-family: 'Space Grotesk', sans-serif;
     }
 
-    /* Card Panels with Glowing Neon Borders */
     .neon-card {
       background: rgba(18, 20, 29, 0.85);
       backdrop-filter: blur(12px);
@@ -35,7 +33,6 @@
       transform: translateY(-2px);
     }
 
-    /* Vibrant Neon Borders & Shadows */
     .neon-border-green {
       border: 1px solid rgba(52, 211, 153, 0.4);
       box-shadow: 0 0 15px -3px rgba(52, 211, 153, 0.15), inset 0 0 10px -5px rgba(52, 211, 153, 0.1);
@@ -57,34 +54,27 @@
       box-shadow: 0 0 20px -2px rgba(251, 191, 36, 0.25), inset 0 0 10px -5px rgba(251, 191, 36, 0.15);
     }
 
-    /* Bright Neon Gradients */
     .gradient-green-cyan {
       background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
     }
     .gradient-purple-pink {
       background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
     }
-    .gradient-amber-rose {
-      background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
-    }
 
-    /* Text Glow Effects */
     .glow-text-green { text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
     .glow-text-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
     .glow-text-pink { text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); }
     .glow-text-purple { text-shadow: 0 0 10px rgba(192, 132, 252, 0.5); }
 
-    /* Custom Scrollbar */
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #0b0c10; }
     ::-webkit-scrollbar-thumb { background: #26293b; border-radius: 99px; }
-    ::-webkit-scrollbar-thumb:hover { background: #3b3f58; }
   </style>
 </head>
 <body class="p-3 md:p-6 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
   <div class="max-w-6xl mx-auto space-y-6">
 
-    <!-- App Header & Navigation -->
+    <!-- Header Navigation -->
     <header class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/90 backdrop-blur-md p-4 md:p-5 rounded-3xl border border-slate-800 shadow-2xl">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 rounded-2xl gradient-green-cyan flex items-center justify-center text-black text-2xl font-bold shadow-lg shadow-emerald-500/20 animate-pulse">
@@ -98,7 +88,6 @@
         </div>
       </div>
 
-      <!-- Navigation Tabs & Rollover Action -->
       <div class="flex flex-wrap items-center gap-2">
         <button onclick="rolloverMonth()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 transition-all flex items-center gap-1.5 shadow-md hover:scale-105" title="Move remaining funds to Savings & start a fresh month">
           <span>🔄</span> Rollover Month
@@ -120,7 +109,7 @@
       </div>
     </header>
 
-    <!-- Top Balance Summary Banner -->
+    <!-- Top Balance Cards -->
     <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
       <!-- Income This Month -->
       <div class="neon-card neon-border-green p-5 flex items-center justify-between">
@@ -161,7 +150,7 @@
         <div>
           <p class="text-xs font-bold text-purple-400 uppercase tracking-widest">Saved From Last Month</p>
           <h3 id="stat-saved" class="text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-purple">$0.00</h3>
-          <p class="text-[10px] text-purple-300/70 mt-0.5">Rolled Over Savings</p>
+          <p id="stat-saved-note" class="text-[10px] text-purple-300/70 mt-0.5">Rolled Over Savings</p>
         </div>
         <div class="w-12 h-12 rounded-2xl bg-purple-950/80 text-purple-400 border border-purple-500/30 flex items-center justify-center text-2xl">
           🏦
@@ -169,13 +158,11 @@
       </div>
     </section>
 
-    <!-- TAB 1: DASHBOARD (Income & Expense Management) -->
+    <!-- TAB 1: DASHBOARD -->
     <main id="view-dashboard" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
       
-      <!-- Left Column: Input Forms -->
+      <!-- Input Forms -->
       <div class="lg:col-span-5 space-y-6">
-        
-        <!-- Add Transaction Card -->
         <div class="neon-card neon-border-cyan p-6 space-y-4">
           <div class="flex items-center justify-between">
             <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400 font-heading">
@@ -190,7 +177,7 @@
           <form id="tx-form" onsubmit="handleAddTransaction(event)" class="space-y-3.5">
             <div>
               <label class="block text-xs font-bold text-slate-400 mb-1">Title / Description</label>
-              <input type="text" id="tx-desc" placeholder="e.g. Groceries, Paycheck, Boba Tea" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+              <input type="text" id="tx-desc" placeholder="e.g. Allowance, Gas, Boba Tea" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -218,14 +205,14 @@
           </form>
         </div>
 
-        <!-- Tight Budget Alert Banner -->
+        <!-- Overspend / Tight Budget Alert Banner -->
         <div id="tight-budget-banner" class="neon-card neon-border-amber p-5 bg-amber-950/20 hidden">
           <div class="flex items-start gap-3">
             <span class="text-3xl animate-bounce">🚨</span>
             <div class="space-y-1">
-              <h4 class="font-bold text-amber-400 font-heading">Low Funds Alert Triggered!</h4>
-              <p class="text-xs text-amber-200/80 leading-relaxed">
-                Your remaining funds are under $50 or spent funds are critical. PocketPal has activated Survival Mode to generate dirt-cheap meal and fuel saving tips.
+              <h4 id="banner-title" class="font-bold text-amber-400 font-heading">Low Funds Alert Triggered!</h4>
+              <p id="banner-desc" class="text-xs text-amber-200/80 leading-relaxed">
+                Your remaining funds are low or spent funds are high. PocketPal has activated Survival Mode for dirt-cheap meal and fuel saving tips.
               </p>
               <button onclick="switchTab('coach'); triggerSurvivalAdvice();" class="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-500 text-black hover:bg-amber-400 transition-all inline-flex items-center gap-1 shadow-md">
                 ⚡ Emergency Budget Hacks
@@ -236,7 +223,7 @@
 
       </div>
 
-      <!-- Right Column: Transactions List -->
+      <!-- Ledger Transaction List -->
       <div class="lg:col-span-7 space-y-4">
         <div class="neon-card neon-border-purple p-6">
           <div class="flex items-center justify-between mb-4">
@@ -254,7 +241,7 @@
           </div>
 
           <div id="tx-list" class="space-y-3 max-h-[460px] overflow-y-auto pr-1">
-            <!-- Dynamic JS Items -->
+            <!-- Dynamic Ledger Items -->
           </div>
         </div>
       </div>
@@ -263,19 +250,17 @@
 
     <!-- TAB 2: WISHLIST & GOALS -->
     <main id="view-wishlist" class="grid grid-cols-1 lg:grid-cols-12 gap-6 hidden">
-      
-      <!-- Left Column: Add Wishlist Form -->
       <div class="lg:col-span-5 space-y-6">
         <div class="neon-card neon-border-purple p-6 space-y-4">
           <h2 class="text-xl font-bold flex items-center gap-2 text-purple-400 font-heading">
             <span>✨</span> Wishlist & Goal Planner
           </h2>
-          <p class="text-xs text-slate-400">Log items you want to buy. The AI will recommend optimal timing based on your accumulated savings.</p>
+          <p class="text-xs text-slate-400">Log items you want to buy. The AI will recommend optimal timing based on your saved funds.</p>
 
           <form id="wishlist-form" onsubmit="handleAddWishlistItem(event)" class="space-y-3.5">
             <div>
               <label class="block text-xs font-bold text-slate-400 mb-1">Item / Goal Title</label>
-              <input type="text" id="wish-title" placeholder="e.g. Wireless Headphones, Weekend Trip" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-purple-400">
+              <input type="text" id="wish-title" placeholder="e.g. Wireless Headphones" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-purple-400">
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -310,7 +295,6 @@
         </div>
       </div>
 
-      <!-- Right Column: Wishlist Display -->
       <div class="lg:col-span-7 space-y-6">
         <div class="neon-card neon-border-cyan p-6">
           <div class="flex items-center justify-between mb-4">
@@ -323,11 +307,10 @@
           </div>
 
           <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <!-- Dynamic Wishlist Cards -->
+            <!-- Wishlist cards -->
           </div>
         </div>
 
-        <!-- AI Wishlist Advice Result Box -->
         <div id="wishlist-ai-box" class="neon-card neon-border-purple p-6 hidden space-y-3 bg-purple-950/20">
           <div class="flex items-center gap-2 text-purple-300 font-bold font-heading">
             <span class="text-2xl">💡</span> AI Purchase Timing & Savings Blueprint
@@ -337,20 +320,15 @@
           </div>
         </div>
       </div>
-
     </main>
 
-    <!-- TAB 3: AI COACH & ADVISOR -->
+    <!-- TAB 3: AI COACH -->
     <main id="view-coach" class="grid grid-cols-1 lg:grid-cols-12 gap-6 hidden">
-      
-      <!-- Quick Action Hacks -->
       <div class="lg:col-span-4 space-y-4">
         <div class="neon-card neon-border-green p-6 space-y-4">
           <h2 class="text-xl font-bold flex items-center gap-2 text-emerald-400 font-heading">
             <span>⚡</span> AI Micro-Consults
           </h2>
-          <p class="text-xs text-slate-400">One-tap financial diagnostics grounded in your actual ledger.</p>
-
           <div class="space-y-2.5">
             <button onclick="askCoach('Analyze my recent spending habits this month and point out where I can cut back.')" class="w-full p-3 rounded-xl bg-slate-950/80 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/50 text-left font-semibold text-xs text-slate-200 flex items-center gap-2 transition-all">
               🔍 Monthly Spending Audit
@@ -368,7 +346,6 @@
         </div>
       </div>
 
-      <!-- AI Chat Interface -->
       <div class="lg:col-span-8">
         <div class="neon-card neon-border-green p-6 flex flex-col h-[520px]">
           <div class="flex items-center justify-between pb-3 border-b border-slate-800">
@@ -386,26 +363,23 @@
             <button onclick="clearChat()" class="text-xs font-semibold text-slate-500 hover:text-slate-300">Clear</button>
           </div>
 
-          <!-- Chat Output Container -->
           <div id="chat-messages" class="flex-1 overflow-y-auto my-4 space-y-3 pr-2">
             <div class="flex items-start gap-2.5">
               <div class="w-8 h-8 rounded-xl gradient-green-cyan flex items-center justify-center text-black text-xs font-bold shrink-0">🐷</div>
               <div class="bg-slate-950 p-3.5 rounded-2xl rounded-tl-none border border-slate-800 text-xs text-slate-300 leading-relaxed max-w-[85%]">
-                Hey there! I'm PocketPal 🐷. I'm tracking your income, spending, and saved rollover funds. Ask me anything about budgeting, cheap recipes, or rollover targets!
+                Hey there! I'm PocketPal 🐷. I'm ready to track your income and spending. Ask me anything about budgeting or recipes!
               </div>
             </div>
           </div>
 
-          <!-- Chat Input -->
           <form onsubmit="handleChatSubmit(event)" class="flex gap-2 pt-2 border-t border-slate-800">
-            <input type="text" id="chat-input" placeholder="Ask PocketPal for budget advice, recipes, gas tips..." class="flex-1 px-4 py-3 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-400 text-sm">
+            <input type="text" id="chat-input" placeholder="Ask PocketPal for budget advice..." class="flex-1 px-4 py-3 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-400 text-sm">
             <button type="submit" id="chat-send-btn" class="px-5 py-3 rounded-xl gradient-green-cyan text-black font-extrabold text-sm shadow-md hover:opacity-95 transition-all uppercase tracking-wider">
               Send
             </button>
           </form>
         </div>
       </div>
-
     </main>
 
   </div>
@@ -417,9 +391,7 @@
         <h3 class="text-lg font-bold flex items-center gap-2 font-heading text-cyan-400">⚙️ Gemini API Setup</h3>
         <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white">✖</button>
       </div>
-      <p class="text-xs text-slate-400 leading-relaxed">
-        PocketPal uses Gemini 3 Flash by default. Enter your custom Google Gemini API Key here if desired.
-      </p>
+      <p class="text-xs text-slate-400 leading-relaxed">Enter your custom Google Gemini API Key here if desired.</p>
       <div>
         <label class="block text-xs font-bold text-slate-400 mb-1">API Key</label>
         <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:border-cyan-400">
@@ -432,7 +404,7 @@
   </div>
 
   <script>
-    /* PocketPal State Management */
+    /* PocketPal State Management - Clean Default Initialization */
     let state = {
       transactions: JSON.parse(localStorage.getItem('pocketpal_txs') || '[]'),
       wishlist: JSON.parse(localStorage.getItem('pocketpal_wish') || '[]'),
@@ -442,27 +414,9 @@
     };
 
     window.onload = function() {
-      if (state.transactions.length === 0 && state.savedFromLastMonth === 0) {
-        state.savedFromLastMonth = 120.00;
-        state.transactions = [
-          { id: 1, desc: 'Allowance Paycheck', amount: 350.00, type: 'income', category: 'Income', date: new Date().toLocaleDateString() },
-          { id: 2, desc: 'Grocery Haul', amount: 48.50, type: 'expense', category: 'Food & Dining', date: new Date().toLocaleDateString() },
-          { id: 3, desc: 'Gas Station Refill', amount: 30.00, type: 'expense', category: 'Transportation', date: new Date().toLocaleDateString() }
-        ];
-        saveState();
-      }
-
-      if (state.wishlist.length === 0) {
-        state.wishlist = [
-          { id: 1, title: 'Wireless Gaming Earbuds', price: 85.00, priority: 'Medium', timeline: '1 month' }
-        ];
-        saveWishlist();
-      }
-
       renderAll();
     };
 
-    // Navigation Switcher
     function switchTab(tab) {
       document.getElementById('view-dashboard').classList.add('hidden');
       document.getElementById('view-wishlist').classList.add('hidden');
@@ -535,7 +489,6 @@
       }
     }
 
-    // Rollover logic: takes leftover funds from this month and moves them into "Saved From Last Month"
     function rolloverMonth() {
       const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
       const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
@@ -548,7 +501,7 @@
 
       if (confirm(`Close out this month and transfer $${remainingThisMonth.toFixed(2)} remaining funds into "Saved From Last Month"? This will start a fresh month for income and expenses.`)) {
         state.savedFromLastMonth += remainingThisMonth;
-        state.transactions = []; // Clear current monthly transactions
+        state.transactions = [];
         saveState();
         renderAll();
         
@@ -566,14 +519,7 @@
 
       if (!title || isNaN(price) || price <= 0) return;
 
-      const newItem = {
-        id: Date.now(),
-        title,
-        price,
-        priority,
-        timeline
-      };
-
+      const newItem = { id: Date.now(), title, price, priority, timeline };
       state.wishlist.push(newItem);
       saveWishlist();
       renderWishlist();
@@ -598,25 +544,70 @@
     function renderAll() {
       const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
       const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
-      const remainingFundsThisMonth = incomeThisMonth - spentThisMonth;
+      let rawRemaining = incomeThisMonth - spentThisMonth;
+
+      let effectiveSavings = state.savedFromLastMonth;
+      let effectiveRemaining = rawRemaining;
+      let pulledFromSavings = 0;
+
+      // Overspend Logic: Pull from savings if remaining funds are negative
+      if (rawRemaining < 0) {
+        const deficit = Math.abs(rawRemaining);
+        if (effectiveSavings >= deficit) {
+          pulledFromSavings = deficit;
+          effectiveSavings = effectiveSavings - deficit;
+          effectiveRemaining = 0.00;
+        } else {
+          pulledFromSavings = effectiveSavings;
+          effectiveRemaining = -(deficit - effectiveSavings);
+          effectiveSavings = 0.00;
+        }
+      }
 
       document.getElementById('stat-income').innerText = `$${incomeThisMonth.toFixed(2)}`;
       document.getElementById('stat-spent').innerText = `$${spentThisMonth.toFixed(2)}`;
-      document.getElementById('stat-balance').innerText = `$${remainingFundsThisMonth.toFixed(2)}`;
-      document.getElementById('stat-saved').innerText = `$${state.savedFromLastMonth.toFixed(2)}`;
+      
+      const balanceEl = document.getElementById('stat-balance');
+      balanceEl.innerText = `$${effectiveRemaining.toFixed(2)}`;
+      if (effectiveRemaining < 0) {
+        balanceEl.className = "text-2xl md:text-3xl font-extrabold text-rose-400 mt-1 glow-text-pink";
+      } else {
+        balanceEl.className = "text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-cyan";
+      }
 
+      document.getElementById('stat-saved').innerText = `$${effectiveSavings.toFixed(2)}`;
+      const savedNoteEl = document.getElementById('stat-saved-note');
+      if (pulledFromSavings > 0) {
+        savedNoteEl.innerText = `Covered -$${pulledFromSavings.toFixed(2)} Overspend`;
+        savedNoteEl.className = "text-[10px] text-amber-400 font-bold mt-0.5";
+      } else {
+        savedNoteEl.innerText = "Rolled Over Savings";
+        savedNoteEl.className = "text-[10px] text-purple-300/70 mt-0.5";
+      }
+
+      // Banner Alerts
       const tightBanner = document.getElementById('tight-budget-banner');
-      const isTight = remainingFundsThisMonth < 50 || (incomeThisMonth > 0 && spentThisMonth / incomeThisMonth > 0.85);
+      const bannerTitle = document.getElementById('banner-title');
+      const bannerDesc = document.getElementById('banner-desc');
 
-      if (isTight) {
+      if (rawRemaining < 0) {
         tightBanner.classList.remove('hidden');
+        bannerTitle.innerText = "Overspending Deficit Triggered!";
+        bannerDesc.innerText = pulledFromSavings > 0 
+          ? `You overspent this month! $${pulledFromSavings.toFixed(2)} was automatically deducted from your Saved From Last Month reserve to cover the shortfall.`
+          : `You overspent and have exhausted your savings reserve! Check in with AI Coach for emergency saving hacks.`;
+      } else if (rawRemaining > 0 && rawRemaining < 50) {
+        tightBanner.classList.remove('hidden');
+        bannerTitle.innerText = "Low Funds Alert Triggered!";
+        bannerDesc.innerText = `Your remaining funds are under $50. PocketPal has activated Survival Mode for dirt-cheap meal and fuel saving tips.`;
       } else {
         tightBanner.classList.add('hidden');
       }
 
+      // Render Transaction Ledger
       const txListEl = document.getElementById('tx-list');
       if (state.transactions.length === 0) {
-        txListEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-sm font-medium">No transactions recorded for this month. Add an entry to begin!</div>`;
+        txListEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-sm font-medium">No transactions recorded yet. Add an entry to begin tracking!</div>`;
       } else {
         txListEl.innerHTML = state.transactions.map(t => `
           <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all">
@@ -678,31 +669,26 @@
 
       const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
       const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
-      const remainingFundsThisMonth = incomeThisMonth - spentThisMonth;
-      const isTight = remainingFundsThisMonth < 50 || (incomeThisMonth > 0 && spentThisMonth / incomeThisMonth > 0.85);
+      const rawRemaining = incomeThisMonth - spentThisMonth;
 
       const contextPrompt = `
       User Financial State Context:
       - Income This Month: $${incomeThisMonth.toFixed(2)}
       - Spent This Month: $${spentThisMonth.toFixed(2)}
-      - Remaining Funds This Month: $${remainingFundsThisMonth.toFixed(2)}
-      - Saved From Last Month (Rollover Pool): $${state.savedFromLastMonth.toFixed(2)}
-      - Budget Mode: ${isTight ? 'CRITICAL TIGHT BUDGET SURVIVAL MODE' : 'NORMAL SAFE BUDGET'}
+      - Remaining Funds This Month: $${rawRemaining.toFixed(2)}
+      - Saved From Last Month (Savings Pool): $${state.savedFromLastMonth.toFixed(2)}
       - Monthly Transactions: ${JSON.stringify(state.transactions.slice(0, 8))}
       - Wishlist Items: ${JSON.stringify(state.wishlist)}
 
       Rules:
       1. Persona: PocketPal 🐷, a witty cyberpunk financial AI coach.
-      2. If CRITICAL TIGHT BUDGET SURVIVAL MODE is active: DO NOT advise fun spending. Recommend extreme $1-$3 meal options (beans, eggs, rice, simple pasta), fuel tips, and zero-spend holds.
-      3. Encourage saving and explain how leftover funds automatically roll over into "Saved From Last Month" reserve.
-      4. Format response cleanly with bullet points or emojis.
+      2. If overspent (Remaining Funds < 0), recommend extreme $1-$3 meal options and zero-spend holds.
+      3. Format response cleanly with bullet points or emojis.
       `;
 
       const payload = {
         contents: [{ parts: [{ text: userPrompt }] }],
-        systemInstruction: {
-          parts: [{ text: systemInstruction + "\n" + contextPrompt }]
-        }
+        systemInstruction: { parts: [{ text: systemInstruction + "\n" + contextPrompt }] }
       };
 
       try {
