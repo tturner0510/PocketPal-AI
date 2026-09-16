@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PocketPal AI Budget Coach - Dark Neon Edition</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* Custom Cyberpunk / Dark Neon Aesthetics */
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #0b0c10;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(16, 185, 129, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(168, 85, 247, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 60%);
+      min-height: 100vh;
+      color: #f1f5f9;
+    }
+    
+    h1, h2, h3, .font-heading {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Card Panels with Glowing Neon Borders */
+    .neon-card {
+      background: rgba(18, 20, 29, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 1.5rem;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .neon-card:hover {
+      transform: translateY(-2px);
+    }
+
+    /* Vibrant Neon Borders & Shadows */
+    .neon-border-green {
+      border: 1px solid rgba(52, 211, 153, 0.4);
+      box-shadow: 0 0 15px -3px rgba(52, 211, 153, 0.15), inset 0 0 10px -5px rgba(52, 211, 153, 0.1);
+    }
+    .neon-border-rose {
+      border: 1px solid rgba(251, 113, 133, 0.4);
+      box-shadow: 0 0 15px -3px rgba(251, 113, 133, 0.15), inset 0 0 10px -5px rgba(251, 113, 133, 0.1);
+    }
+    .neon-border-cyan {
+      border: 1px solid rgba(34, 211, 238, 0.4);
+      box-shadow: 0 0 15px -3px rgba(34, 211, 238, 0.15), inset 0 0 10px -5px rgba(34, 211, 238, 0.1);
+    }
+    .neon-border-purple {
+      border: 1px solid rgba(192, 132, 252, 0.4);
+      box-shadow: 0 0 15px -3px rgba(192, 132, 252, 0.15), inset 0 0 10px -5px rgba(192, 132, 252, 0.1);
+    }
+    .neon-border-amber {
+      border: 1px solid rgba(251, 191, 36, 0.5);
+      box-shadow: 0 0 20px -2px rgba(251, 191, 36, 0.25), inset 0 0 10px -5px rgba(251, 191, 36, 0.15);
+    }
+
+    /* Bright Neon Gradients */
+    .gradient-green-cyan {
+      background: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+    }
+    .gradient-purple-pink {
+      background: linear-gradient(135deg, #a855f7 0%, #ec4899 100%);
+    }
+    .gradient-amber-rose {
+      background: linear-gradient(135deg, #f59e0b 0%, #f43f5e 100%);
+    }
+
+    /* Text Glow Effects */
+    .glow-text-green { text-shadow: 0 0 10px rgba(52, 211, 153, 0.5); }
+    .glow-text-cyan { text-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
+    .glow-text-pink { text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); }
+    .glow-text-purple { text-shadow: 0 0 10px rgba(192, 132, 252, 0.5); }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: #0b0c10; }
+    ::-webkit-scrollbar-thumb { background: #26293b; border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: #3b3f58; }
+  </style>
+</head>
+<body class="p-3 md:p-6 text-slate-100 antialiased selection:bg-cyan-500 selection:text-black">
+  <div class="max-w-6xl mx-auto space-y-6">
+
+    <!-- App Header & Navigation -->
+    <header class="flex flex-col md:flex-row justify-between items-center gap-4 bg-slate-900/90 backdrop-blur-md p-4 md:p-5 rounded-3xl border border-slate-800 shadow-2xl">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 rounded-2xl gradient-green-cyan flex items-center justify-center text-black text-2xl font-bold shadow-lg shadow-emerald-500/20 animate-pulse">
+          🐷
+        </div>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-emerald-400 via-cyan-400 to-purple-400">
+            PocketPal AI
+          </h1>
+          <p class="text-xs md:text-sm font-medium text-slate-400">Cyberpunk Financial Coach & Allowance Tracker</p>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs & Rollover Action -->
+      <div class="flex flex-wrap items-center gap-2">
+        <button onclick="rolloverMonth()" class="px-3.5 py-2 rounded-xl text-xs font-extrabold bg-purple-500/20 hover:bg-purple-500/30 text-purple-300 border border-purple-500/40 transition-all flex items-center gap-1.5 shadow-md hover:scale-105" title="Move remaining funds to Savings & start a fresh month">
+          <span>🔄</span> Rollover Month
+        </button>
+        <nav class="flex flex-wrap gap-2 bg-slate-950 p-1.5 rounded-2xl border border-slate-800">
+          <button onclick="switchTab('dashboard')" id="tab-dashboard" class="px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+            <span>📊</span> Dashboard
+          </button>
+          <button onclick="switchTab('wishlist')" id="tab-wishlist" class="px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-cyan-400">
+            <span>✨</span> Wishlist
+          </button>
+          <button onclick="switchTab('coach')" id="tab-coach" class="px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-purple-400">
+            <span>🤖</span> AI Coach
+          </button>
+          <button onclick="openApiKeyModal()" class="px-3 py-2 rounded-xl text-sm font-medium text-slate-400 hover:bg-slate-800 transition-all" title="Settings / API Key">
+            ⚙️
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Top Balance Summary Banner -->
+    <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Income This Month -->
+      <div class="neon-card neon-border-green p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-emerald-400 uppercase tracking-widest">Income This Month</p>
+          <h3 id="stat-income" class="text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-green">$0.00</h3>
+        </div>
+        <div class="w-12 h-12 rounded-2xl bg-emerald-950/80 text-emerald-400 border border-emerald-500/30 flex items-center justify-center text-2xl">
+          💵
+        </div>
+      </div>
+
+      <!-- Spent This Month -->
+      <div class="neon-card neon-border-rose p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-rose-400 uppercase tracking-widest">Spent This Month</p>
+          <h3 id="stat-spent" class="text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-pink">$0.00</h3>
+        </div>
+        <div class="w-12 h-12 rounded-2xl bg-rose-950/80 text-rose-400 border border-rose-500/30 flex items-center justify-center text-2xl">
+          💸
+        </div>
+      </div>
+
+      <!-- Remaining Funds This Month -->
+      <div class="neon-card neon-border-cyan p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-cyan-400 uppercase tracking-widest">Remaining Funds</p>
+          <h3 id="stat-balance" class="text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-cyan">$0.00</h3>
+          <p class="text-[10px] text-cyan-300/70 mt-0.5">This Month Available</p>
+        </div>
+        <div id="stat-balance-icon" class="w-12 h-12 rounded-2xl bg-cyan-950/80 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-2xl">
+          ⚡
+        </div>
+      </div>
+
+      <!-- Saved From Last Month -->
+      <div class="neon-card neon-border-purple p-5 flex items-center justify-between">
+        <div>
+          <p class="text-xs font-bold text-purple-400 uppercase tracking-widest">Saved From Last Month</p>
+          <h3 id="stat-saved" class="text-2xl md:text-3xl font-extrabold text-white mt-1 glow-text-purple">$0.00</h3>
+          <p class="text-[10px] text-purple-300/70 mt-0.5">Rolled Over Savings</p>
+        </div>
+        <div class="w-12 h-12 rounded-2xl bg-purple-950/80 text-purple-400 border border-purple-500/30 flex items-center justify-center text-2xl">
+          🏦
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 1: DASHBOARD (Income & Expense Management) -->
+    <main id="view-dashboard" class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      
+      <!-- Left Column: Input Forms -->
+      <div class="lg:col-span-5 space-y-6">
+        
+        <!-- Add Transaction Card -->
+        <div class="neon-card neon-border-cyan p-6 space-y-4">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400 font-heading">
+              <span>➕</span> Add Entry
+            </h2>
+            <div class="flex bg-slate-950 p-1 rounded-xl text-xs font-bold border border-slate-800">
+              <button onclick="setTxType('expense')" id="btn-type-expense" class="px-3 py-1.5 rounded-lg bg-rose-500 text-white shadow-sm transition-all">Expense</button>
+              <button onclick="setTxType('income')" id="btn-type-income" class="px-3 py-1.5 rounded-lg text-slate-400 transition-all">Income</button>
+            </div>
+          </div>
+
+          <form id="tx-form" onsubmit="handleAddTransaction(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-1">Title / Description</label>
+              <input type="text" id="tx-desc" placeholder="e.g. Groceries, Paycheck, Boba Tea" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">Amount ($)</label>
+                <input type="number" step="0.01" min="0.01" id="tx-amount" placeholder="0.00" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">Category</label>
+                <select id="tx-category" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white focus:outline-none focus:border-cyan-400 focus:ring-1 focus:ring-cyan-400">
+                  <option value="Food & Dining">🍔 Food & Dining</option>
+                  <option value="Transportation">⛽ Gas & Transit</option>
+                  <option value="Utilities">💡 Utilities & Rent</option>
+                  <option value="Shopping">🛍️ Shopping</option>
+                  <option value="Entertainment">🎬 Fun & Gaming</option>
+                  <option value="Income">💰 Income / Allowance</option>
+                  <option value="Other">📦 Other</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl gradient-green-cyan text-black font-extrabold shadow-lg shadow-emerald-500/20 hover:opacity-95 transition-all uppercase tracking-wider text-sm">
+              Save Entry
+            </button>
+          </form>
+        </div>
+
+        <!-- Tight Budget Alert Banner -->
+        <div id="tight-budget-banner" class="neon-card neon-border-amber p-5 bg-amber-950/20 hidden">
+          <div class="flex items-start gap-3">
+            <span class="text-3xl animate-bounce">🚨</span>
+            <div class="space-y-1">
+              <h4 class="font-bold text-amber-400 font-heading">Low Funds Alert Triggered!</h4>
+              <p class="text-xs text-amber-200/80 leading-relaxed">
+                Your remaining funds are under $50 or spent funds are critical. PocketPal has activated Survival Mode to generate dirt-cheap meal and fuel saving tips.
+              </p>
+              <button onclick="switchTab('coach'); triggerSurvivalAdvice();" class="mt-2 text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-500 text-black hover:bg-amber-400 transition-all inline-flex items-center gap-1 shadow-md">
+                ⚡ Emergency Budget Hacks
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Transactions List -->
+      <div class="lg:col-span-7 space-y-4">
+        <div class="neon-card neon-border-purple p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-purple-400 font-heading">
+              <span>📜</span> Monthly Ledger
+            </h2>
+            <div class="flex items-center gap-2">
+              <button onclick="rolloverMonth()" class="text-xs font-semibold text-purple-300 hover:text-purple-200 bg-purple-950/50 border border-purple-800/60 px-2.5 py-1 rounded-lg transition-all">
+                🔄 End Month
+              </button>
+              <button onclick="clearAllTransactions()" class="text-xs font-semibold text-rose-400 hover:text-rose-300 bg-rose-950/40 border border-rose-800/50 px-2.5 py-1 rounded-lg transition-all">
+                Clear All
+              </button>
+            </div>
+          </div>
+
+          <div id="tx-list" class="space-y-3 max-h-[460px] overflow-y-auto pr-1">
+            <!-- Dynamic JS Items -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- TAB 2: WISHLIST & GOALS -->
+    <main id="view-wishlist" class="grid grid-cols-1 lg:grid-cols-12 gap-6 hidden">
+      
+      <!-- Left Column: Add Wishlist Form -->
+      <div class="lg:col-span-5 space-y-6">
+        <div class="neon-card neon-border-purple p-6 space-y-4">
+          <h2 class="text-xl font-bold flex items-center gap-2 text-purple-400 font-heading">
+            <span>✨</span> Wishlist & Goal Planner
+          </h2>
+          <p class="text-xs text-slate-400">Log items you want to buy. The AI will recommend optimal timing based on your accumulated savings.</p>
+
+          <form id="wishlist-form" onsubmit="handleAddWishlistItem(event)" class="space-y-3.5">
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-1">Item / Goal Title</label>
+              <input type="text" id="wish-title" placeholder="e.g. Wireless Headphones, Weekend Trip" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-purple-400">
+            </div>
+
+            <div class="grid grid-cols-2 gap-3">
+              <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">Target Price ($)</label>
+                <input type="number" step="0.01" min="1" id="wish-price" placeholder="150.00" required class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white placeholder-slate-600 focus:outline-none focus:border-purple-400">
+              </div>
+              <div>
+                <label class="block text-xs font-bold text-slate-400 mb-1">Priority Level</label>
+                <select id="wish-priority" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white focus:outline-none focus:border-purple-400">
+                  <option value="High">🔥 High (Need soon)</option>
+                  <option value="Medium" selected>⭐ Medium (Want)</option>
+                  <option value="Low">🌱 Low (Nice to have)</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-400 mb-1">Timeline</label>
+              <select id="wish-timeline" class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950/80 text-white focus:outline-none focus:border-purple-400">
+                <option value="1 month">🗓️ Within 1 Month</option>
+                <option value="3 months">📅 Within 3 Months</option>
+                <option value="6 months">⏳ Within 6 Months</option>
+                <option value="Someday">🌈 Someday</option>
+              </select>
+            </div>
+
+            <button type="submit" class="w-full py-3 rounded-xl gradient-purple-pink text-white font-extrabold shadow-lg shadow-purple-500/20 hover:opacity-95 transition-all uppercase tracking-wider text-sm">
+              Save Goal
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right Column: Wishlist Display -->
+      <div class="lg:col-span-7 space-y-6">
+        <div class="neon-card neon-border-cyan p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold flex items-center gap-2 text-cyan-400 font-heading">
+              <span>🎯</span> Wishlist Tracker
+            </h2>
+            <button onclick="getAiWishlistAdvice()" class="px-3.5 py-1.5 rounded-xl gradient-purple-pink text-white text-xs font-bold flex items-center gap-1.5 shadow-md hover:scale-105 transition-all">
+              <span>🤖</span> Analyze Wishlist Deals
+            </button>
+          </div>
+
+          <div id="wishlist-container" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <!-- Dynamic Wishlist Cards -->
+          </div>
+        </div>
+
+        <!-- AI Wishlist Advice Result Box -->
+        <div id="wishlist-ai-box" class="neon-card neon-border-purple p-6 hidden space-y-3 bg-purple-950/20">
+          <div class="flex items-center gap-2 text-purple-300 font-bold font-heading">
+            <span class="text-2xl">💡</span> AI Purchase Timing & Savings Blueprint
+          </div>
+          <div id="wishlist-ai-content" class="text-xs md:text-sm leading-relaxed text-slate-200 space-y-2">
+            <!-- AI Output -->
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- TAB 3: AI COACH & ADVISOR -->
+    <main id="view-coach" class="grid grid-cols-1 lg:grid-cols-12 gap-6 hidden">
+      
+      <!-- Quick Action Hacks -->
+      <div class="lg:col-span-4 space-y-4">
+        <div class="neon-card neon-border-green p-6 space-y-4">
+          <h2 class="text-xl font-bold flex items-center gap-2 text-emerald-400 font-heading">
+            <span>⚡</span> AI Micro-Consults
+          </h2>
+          <p class="text-xs text-slate-400">One-tap financial diagnostics grounded in your actual ledger.</p>
+
+          <div class="space-y-2.5">
+            <button onclick="askCoach('Analyze my recent spending habits this month and point out where I can cut back.')" class="w-full p-3 rounded-xl bg-slate-950/80 hover:bg-emerald-950/40 border border-slate-800 hover:border-emerald-500/50 text-left font-semibold text-xs text-slate-200 flex items-center gap-2 transition-all">
+              🔍 Monthly Spending Audit
+            </button>
+            <button onclick="triggerSurvivalAdvice()" class="w-full p-3 rounded-xl bg-amber-950/40 hover:bg-amber-900/60 border border-amber-500/50 text-left font-semibold text-xs text-amber-300 flex items-center gap-2 transition-all">
+              🍜 Ultra-Cheap Meal & Fuel Hacks
+            </button>
+            <button onclick="askCoach('How much will I roll over into Saved From Last Month at my current rate?')" class="w-full p-3 rounded-xl bg-slate-950/80 hover:bg-cyan-950/40 border border-slate-800 hover:border-cyan-500/50 text-left font-semibold text-xs text-slate-200 flex items-center gap-2 transition-all">
+              🎯 Projected Rollover Forecast
+            </button>
+            <button onclick="askCoach('Suggest 3 fun zero-cost weekend activities!')" class="w-full p-3 rounded-xl bg-slate-950/80 hover:bg-purple-950/40 border border-slate-800 hover:border-purple-500/50 text-left font-semibold text-xs text-slate-200 flex items-center gap-2 transition-all">
+              🎉 Free Weekend Fun Ideas
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- AI Chat Interface -->
+      <div class="lg:col-span-8">
+        <div class="neon-card neon-border-green p-6 flex flex-col h-[520px]">
+          <div class="flex items-center justify-between pb-3 border-b border-slate-800">
+            <div class="flex items-center gap-3">
+              <div class="w-10 h-10 rounded-xl gradient-green-cyan flex items-center justify-center text-black text-xl font-bold">
+                🐷
+              </div>
+              <div>
+                <h3 class="font-bold text-white font-heading">PocketPal Coach</h3>
+                <p class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                  <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> Gemini 3 Flash Online
+                </p>
+              </div>
+            </div>
+            <button onclick="clearChat()" class="text-xs font-semibold text-slate-500 hover:text-slate-300">Clear</button>
+          </div>
+
+          <!-- Chat Output Container -->
+          <div id="chat-messages" class="flex-1 overflow-y-auto my-4 space-y-3 pr-2">
+            <div class="flex items-start gap-2.5">
+              <div class="w-8 h-8 rounded-xl gradient-green-cyan flex items-center justify-center text-black text-xs font-bold shrink-0">🐷</div>
+              <div class="bg-slate-950 p-3.5 rounded-2xl rounded-tl-none border border-slate-800 text-xs text-slate-300 leading-relaxed max-w-[85%]">
+                Hey there! I'm PocketPal 🐷. I'm tracking your income, spending, and saved rollover funds. Ask me anything about budgeting, cheap recipes, or rollover targets!
+              </div>
+            </div>
+          </div>
+
+          <!-- Chat Input -->
+          <form onsubmit="handleChatSubmit(event)" class="flex gap-2 pt-2 border-t border-slate-800">
+            <input type="text" id="chat-input" placeholder="Ask PocketPal for budget advice, recipes, gas tips..." class="flex-1 px-4 py-3 rounded-xl border border-slate-800 bg-slate-950 text-white placeholder-slate-600 focus:outline-none focus:border-emerald-400 text-sm">
+            <button type="submit" id="chat-send-btn" class="px-5 py-3 rounded-xl gradient-green-cyan text-black font-extrabold text-sm shadow-md hover:opacity-95 transition-all uppercase tracking-wider">
+              Send
+            </button>
+          </form>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+  <!-- API Key Modal -->
+  <div id="modal-api" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+    <div class="neon-card neon-border-cyan p-6 max-w-md w-full space-y-4 bg-slate-900 text-white">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-bold flex items-center gap-2 font-heading text-cyan-400">⚙️ Gemini API Setup</h3>
+        <button onclick="closeApiKeyModal()" class="text-slate-400 hover:text-white">✖</button>
+      </div>
+      <p class="text-xs text-slate-400 leading-relaxed">
+        PocketPal uses Gemini 3 Flash by default. Enter your custom Google Gemini API Key here if desired.
+      </p>
+      <div>
+        <label class="block text-xs font-bold text-slate-400 mb-1">API Key</label>
+        <input type="password" id="input-api-key" placeholder="AIzaSy..." class="w-full px-4 py-2.5 rounded-xl border border-slate-800 bg-slate-950 text-white text-sm focus:outline-none focus:border-cyan-400">
+      </div>
+      <div class="flex justify-end gap-2 pt-2">
+        <button onclick="closeApiKeyModal()" class="px-4 py-2 rounded-xl text-xs font-bold text-slate-400 hover:bg-slate-800">Cancel</button>
+        <button onclick="saveApiKey()" class="px-4 py-2 rounded-xl gradient-green-cyan text-black text-xs font-extrabold shadow-md">Save Key</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* PocketPal State Management */
+    let state = {
+      transactions: JSON.parse(localStorage.getItem('pocketpal_txs') || '[]'),
+      wishlist: JSON.parse(localStorage.getItem('pocketpal_wish') || '[]'),
+      savedFromLastMonth: parseFloat(localStorage.getItem('pocketpal_saved_last_month') || '0.00'),
+      apiKey: localStorage.getItem('pocketpal_apikey') || '',
+      currentTxType: 'expense'
+    };
+
+    window.onload = function() {
+      if (state.transactions.length === 0 && state.savedFromLastMonth === 0) {
+        state.savedFromLastMonth = 120.00;
+        state.transactions = [
+          { id: 1, desc: 'Allowance Paycheck', amount: 350.00, type: 'income', category: 'Income', date: new Date().toLocaleDateString() },
+          { id: 2, desc: 'Grocery Haul', amount: 48.50, type: 'expense', category: 'Food & Dining', date: new Date().toLocaleDateString() },
+          { id: 3, desc: 'Gas Station Refill', amount: 30.00, type: 'expense', category: 'Transportation', date: new Date().toLocaleDateString() }
+        ];
+        saveState();
+      }
+
+      if (state.wishlist.length === 0) {
+        state.wishlist = [
+          { id: 1, title: 'Wireless Gaming Earbuds', price: 85.00, priority: 'Medium', timeline: '1 month' }
+        ];
+        saveWishlist();
+      }
+
+      renderAll();
+    };
+
+    // Navigation Switcher
+    function switchTab(tab) {
+      document.getElementById('view-dashboard').classList.add('hidden');
+      document.getElementById('view-wishlist').classList.add('hidden');
+      document.getElementById('view-coach').classList.add('hidden');
+
+      document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-emerald-400";
+      document.getElementById('tab-wishlist').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-cyan-400";
+      document.getElementById('tab-coach').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 text-slate-400 hover:text-purple-400";
+
+      document.getElementById('view-' + tab).classList.remove('hidden');
+
+      if (tab === 'dashboard') {
+        document.getElementById('tab-dashboard').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/40";
+      } else if (tab === 'wishlist') {
+        document.getElementById('tab-wishlist').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 bg-cyan-500/20 text-cyan-400 border border-cyan-500/40";
+      } else if (tab === 'coach') {
+        document.getElementById('tab-coach').className = "px-4 py-2 rounded-xl text-sm font-bold transition-all flex items-center gap-1.5 bg-purple-500/20 text-purple-400 border border-purple-500/40";
+      }
+    }
+
+    function setTxType(type) {
+      state.currentTxType = type;
+      const btnExp = document.getElementById('btn-type-expense');
+      const btnInc = document.getElementById('btn-type-income');
+
+      if (type === 'expense') {
+        btnExp.className = "px-3 py-1.5 rounded-lg bg-rose-500 text-white shadow-sm transition-all";
+        btnInc.className = "px-3 py-1.5 rounded-lg text-slate-400 transition-all";
+      } else {
+        btnInc.className = "px-3 py-1.5 rounded-lg bg-emerald-500 text-black shadow-sm transition-all";
+        btnExp.className = "px-3 py-1.5 rounded-lg text-slate-400 transition-all";
+      }
+    }
+
+    function handleAddTransaction(e) {
+      e.preventDefault();
+      const desc = document.getElementById('tx-desc').value.trim();
+      const amount = parseFloat(document.getElementById('tx-amount').value);
+      const category = document.getElementById('tx-category').value;
+
+      if (!desc || isNaN(amount) || amount <= 0) return;
+
+      const newTx = {
+        id: Date.now(),
+        desc,
+        amount,
+        type: state.currentTxType,
+        category,
+        date: new Date().toLocaleDateString()
+      };
+
+      state.transactions.unshift(newTx);
+      saveState();
+      renderAll();
+
+      document.getElementById('tx-form').reset();
+    }
+
+    function deleteTransaction(id) {
+      state.transactions = state.transactions.filter(t => t.id !== id);
+      saveState();
+      renderAll();
+    }
+
+    function clearAllTransactions() {
+      if (confirm('Clear all recorded transactions for this month?')) {
+        state.transactions = [];
+        saveState();
+        renderAll();
+      }
+    }
+
+    // Rollover logic: takes leftover funds from this month and moves them into "Saved From Last Month"
+    function rolloverMonth() {
+      const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      const remainingThisMonth = incomeThisMonth - spentThisMonth;
+
+      if (remainingThisMonth <= 0) {
+        alert("You don't have positive remaining funds this month to roll over!");
+        return;
+      }
+
+      if (confirm(`Close out this month and transfer $${remainingThisMonth.toFixed(2)} remaining funds into "Saved From Last Month"? This will start a fresh month for income and expenses.`)) {
+        state.savedFromLastMonth += remainingThisMonth;
+        state.transactions = []; // Clear current monthly transactions
+        saveState();
+        renderAll();
+        
+        switchTab('coach');
+        appendChatMessage('ai', `🎉 Month Closed & Funds Transferred! $${remainingThisMonth.toFixed(2)} has been safely rolled into your "Saved From Last Month" reserve. You now have a total of $${state.savedFromLastMonth.toFixed(2)} in savings! 🏦`);
+      }
+    }
+
+    function handleAddWishlistItem(e) {
+      e.preventDefault();
+      const title = document.getElementById('wish-title').value.trim();
+      const price = parseFloat(document.getElementById('wish-price').value);
+      const priority = document.getElementById('wish-priority').value;
+      const timeline = document.getElementById('wish-timeline').value;
+
+      if (!title || isNaN(price) || price <= 0) return;
+
+      const newItem = {
+        id: Date.now(),
+        title,
+        price,
+        priority,
+        timeline
+      };
+
+      state.wishlist.push(newItem);
+      saveWishlist();
+      renderWishlist();
+
+      document.getElementById('wishlist-form').reset();
+    }
+
+    function deleteWishlistItem(id) {
+      state.wishlist = state.wishlist.filter(w => w.id !== id);
+      saveWishlist();
+      renderWishlist();
+    }
+
+    function saveState() {
+      localStorage.setItem('pocketpal_txs', JSON.stringify(state.transactions));
+      localStorage.setItem('pocketpal_saved_last_month', state.savedFromLastMonth.toString());
+    }
+    function saveWishlist() {
+      localStorage.setItem('pocketpal_wish', JSON.stringify(state.wishlist));
+    }
+
+    function renderAll() {
+      const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      const remainingFundsThisMonth = incomeThisMonth - spentThisMonth;
+
+      document.getElementById('stat-income').innerText = `$${incomeThisMonth.toFixed(2)}`;
+      document.getElementById('stat-spent').innerText = `$${spentThisMonth.toFixed(2)}`;
+      document.getElementById('stat-balance').innerText = `$${remainingFundsThisMonth.toFixed(2)}`;
+      document.getElementById('stat-saved').innerText = `$${state.savedFromLastMonth.toFixed(2)}`;
+
+      const tightBanner = document.getElementById('tight-budget-banner');
+      const isTight = remainingFundsThisMonth < 50 || (incomeThisMonth > 0 && spentThisMonth / incomeThisMonth > 0.85);
+
+      if (isTight) {
+        tightBanner.classList.remove('hidden');
+      } else {
+        tightBanner.classList.add('hidden');
+      }
+
+      const txListEl = document.getElementById('tx-list');
+      if (state.transactions.length === 0) {
+        txListEl.innerHTML = `<div class="text-center py-8 text-slate-500 text-sm font-medium">No transactions recorded for this month. Add an entry to begin!</div>`;
+      } else {
+        txListEl.innerHTML = state.transactions.map(t => `
+          <div class="flex items-center justify-between p-3.5 rounded-xl bg-slate-950/80 border border-slate-800 hover:border-slate-700 transition-all">
+            <div class="flex items-center gap-3">
+              <div class="w-9 h-9 rounded-xl flex items-center justify-center text-base ${t.type === 'income' ? 'bg-emerald-950 text-emerald-400 border border-emerald-500/30' : 'bg-rose-950 text-rose-400 border border-rose-500/30'}">
+                ${t.type === 'income' ? '💵' : '💸'}
+              </div>
+              <div>
+                <h4 class="font-bold text-sm text-slate-100">${escapeHtml(t.desc)}</h4>
+                <span class="text-[11px] font-semibold text-slate-500">${t.category} • ${t.date}</span>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="font-extrabold text-sm ${t.type === 'income' ? 'text-emerald-400' : 'text-rose-400'}">
+                ${t.type === 'income' ? '+' : '-'}$${t.amount.toFixed(2)}
+              </span>
+              <button onclick="deleteTransaction(${t.id})" class="text-slate-600 hover:text-rose-400 text-xs font-bold transition-all p-1">
+                ✖
+              </button>
+            </div>
+          </div>
+        `).join('');
+      }
+
+      renderWishlist();
+    }
+
+    function renderWishlist() {
+      const wishContainer = document.getElementById('wishlist-container');
+      if (state.wishlist.length === 0) {
+        wishContainer.innerHTML = `<div class="col-span-2 text-center py-8 text-slate-500 text-sm font-medium">Your wishlist is empty! Add goals to calculate savings plans.</div>`;
+        return;
+      }
+
+      wishContainer.innerHTML = state.wishlist.map(w => `
+        <div class="p-4 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2 relative group">
+          <div class="flex items-start justify-between">
+            <div>
+              <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md ${w.priority === 'High' ? 'bg-rose-950 text-rose-400 border border-rose-800' : w.priority === 'Medium' ? 'bg-amber-950 text-amber-400 border border-amber-800' : 'bg-emerald-950 text-emerald-400 border border-emerald-800'}">
+                ${w.priority} Priority
+              </span>
+              <h4 class="font-bold text-base text-slate-100 mt-1">${escapeHtml(w.title)}</h4>
+            </div>
+            <button onclick="deleteWishlistItem(${w.id})" class="text-slate-600 hover:text-rose-400 text-xs font-bold p-1">
+              ✖
+            </button>
+          </div>
+          <div class="flex items-center justify-between pt-2 border-t border-slate-900">
+            <span class="text-xs text-slate-400 font-medium">Goal: <strong class="text-cyan-400 font-bold">$${w.price.toFixed(2)}</strong></span>
+            <span class="text-xs text-slate-500 font-medium">📅 ${w.timeline}</span>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    async function callGemini(userPrompt, systemInstruction = "") {
+      const apiKey = state.apiKey || "";
+      const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+      const incomeThisMonth = state.transactions.filter(t => t.type === 'income').reduce((acc, t) => acc + t.amount, 0);
+      const spentThisMonth = state.transactions.filter(t => t.type === 'expense').reduce((acc, t) => acc + t.amount, 0);
+      const remainingFundsThisMonth = incomeThisMonth - spentThisMonth;
+      const isTight = remainingFundsThisMonth < 50 || (incomeThisMonth > 0 && spentThisMonth / incomeThisMonth > 0.85);
+
+      const contextPrompt = `
+      User Financial State Context:
+      - Income This Month: $${incomeThisMonth.toFixed(2)}
+      - Spent This Month: $${spentThisMonth.toFixed(2)}
+      - Remaining Funds This Month: $${remainingFundsThisMonth.toFixed(2)}
+      - Saved From Last Month (Rollover Pool): $${state.savedFromLastMonth.toFixed(2)}
+      - Budget Mode: ${isTight ? 'CRITICAL TIGHT BUDGET SURVIVAL MODE' : 'NORMAL SAFE BUDGET'}
+      - Monthly Transactions: ${JSON.stringify(state.transactions.slice(0, 8))}
+      - Wishlist Items: ${JSON.stringify(state.wishlist)}
+
+      Rules:
+      1. Persona: PocketPal 🐷, a witty cyberpunk financial AI coach.
+      2. If CRITICAL TIGHT BUDGET SURVIVAL MODE is active: DO NOT advise fun spending. Recommend extreme $1-$3 meal options (beans, eggs, rice, simple pasta), fuel tips, and zero-spend holds.
+      3. Encourage saving and explain how leftover funds automatically roll over into "Saved From Last Month" reserve.
+      4. Format response cleanly with bullet points or emojis.
+      `;
+
+      const payload = {
+        contents: [{ parts: [{ text: userPrompt }] }],
+        systemInstruction: {
+          parts: [{ text: systemInstruction + "\n" + contextPrompt }]
+        }
+      };
+
+      try {
+        const response = await fetch(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!responseText) throw new Error("Empty AI response.");
+        return responseText;
+      } catch (err) {
+        console.error("Gemini Error:", err);
+        return "System error connecting to PocketPal AI 🐷. Please verify your connection or API key in settings!";
+      }
+    }
+
+    async function handleChatSubmit(e) {
+      e.preventDefault();
+      const inputEl = document.getElementById('chat-input');
+      const msg = inputEl.value.trim();
+      if (!msg) return;
+
+      appendChatMessage('user', msg);
+      inputEl.value = '';
+
+      const sendBtn = document.getElementById('chat-send-btn');
+      sendBtn.disabled = true;
+      sendBtn.innerText = "Analyzing...";
+
+      const aiReply = await callGemini(msg, "You are PocketPal AI budget coach.");
+      appendChatMessage('ai', aiReply);
+
+      sendBtn.disabled = false;
+      sendBtn.innerText = "Send";
+    }
+
+    function askCoach(question) {
+      switchTab('coach');
+      document.getElementById('chat-input').value = question;
+      handleChatSubmit(new Event('submit'));
+    }
+
+    function triggerSurvivalAdvice() {
+      askCoach("Give me an emergency ultra-cheap survival guide for this week: suggest 3 insanely cheap $1-$3 meal recipes and 2 smart gas saving hacks.");
+    }
+
+    async function getAiWishlistAdvice() {
+      const box = document.getElementById('wishlist-ai-box');
+      const content = document.getElementById('wishlist-ai-content');
+      box.classList.remove('hidden');
+      content.innerHTML = `<span class="animate-pulse text-purple-400 font-semibold">Analyzing target goal timelines against cash reserve flow... 🐷</span>`;
+
+      const prompt = "Analyze my wishlist relative to my balance and my Saved From Last Month reserve. Provide: 1. Purchase priority timing. 2. Monthly savings required per item. 3. Deal hunting advice.";
+      const advice = await callGemini(prompt, "You are an expert shopping strategy consultant.");
+
+      content.innerHTML = advice.replace(/\n/g, '<br>');
+    }
+
+    function appendChatMessage(sender, text) {
+      const container = document.getElementById('chat-messages');
+      const isUser = sender === 'user';
+
+      const msgDiv = document.createElement('div');
+      msgDiv.className = `flex items-start gap-2.5 ${isUser ? 'flex-row-reverse' : ''}`;
+
+      const avatar = isUser ? '👤' : '🐷';
+      const bgClass = isUser ? 'bg-emerald-500 text-black font-semibold rounded-tr-none' : 'bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none';
+
+      msgDiv.innerHTML = `
+        <div class="w-8 h-8 rounded-xl ${isUser ? 'bg-emerald-500 text-black font-bold' : 'gradient-green-cyan text-black font-bold'} flex items-center justify-center text-xs shrink-0">
+          ${avatar}
+        </div>
+        <div class="${bgClass} p-3.5 rounded-2xl text-xs leading-relaxed max-w-[85%] whitespace-pre-line">
+          ${escapeHtml(text)}
+        </div>
+      `;
+
+      container.appendChild(msgDiv);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function clearChat() {
+      document.getElementById('chat-messages').innerHTML = `
+        <div class="flex items-start gap-2.5">
+          <div class="w-8 h-8 rounded-xl gradient-green-cyan flex items-center justify-center text-black text-xs font-bold shrink-0">🐷</div>
+          <div class="bg-slate-950 border border-slate-800 p-3.5 rounded-2xl rounded-tl-none text-xs text-slate-300 leading-relaxed max-w-[85%]">
+            Console cleared! How can PocketPal assist your budget today?
+          </div>
+        </div>
+      `;
+    }
+
+    function openApiKeyModal() {
+      document.getElementById('input-api-key').value = state.apiKey;
+      document.getElementById('modal-api').classList.remove('hidden');
+    }
+    function closeApiKeyModal() {
+      document.getElementById('modal-api').classList.add('hidden');
+    }
+    function saveApiKey() {
+      const key = document.getElementById('input-api-key').value.trim();
+      state.apiKey = key;
+      localStorage.setItem('pocketpal_apikey', key);
+      closeApiKeyModal();
+    }
+
+    function escapeHtml(str) {
+      return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
